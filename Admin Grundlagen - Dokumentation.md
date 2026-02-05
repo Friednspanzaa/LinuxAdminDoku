@@ -87,6 +87,12 @@
 - [Snapcraft](https://snapcraft.io/)
 - [Docker Hub](https://hub.docker.com/)
 - [Linuxhotel Wiki](https://wiki.lab.linuxhotel.de/doku.php)
+- [Coreboot](https://www.coreboot.org/)
+- [Kernel](https://www.kernel.org/)
+- [Nova Custom](https://novacustom.com/de/)
+- [Honest Achmed Used Cars and CA-Certs](https://bugzilla.mozilla.org/show_bug.cgi?id=647959)
+- [Cockpit-Lokal](http://localhost:9090/) (Aktivieren mit `systemctl start cockpit`)
+- [OpenCode Container](https://container.gov.de/)
 
 ---
 
@@ -589,10 +595,11 @@ Boom Fertig.
   + `local/` - Skripte und Anwendungen die wir selber anlegen und nicht aus einem Repository oder sowas kommen. Daten hingegen lieber auf `/srv/`
   + `share` -
 + `/opt/` - Verzeichniss für _schlecht_ portierte Software...
-+ `/var/` - Variabele Datein
++ `/var/` - Variable Datein
   + `tmp/` - Wird nicht beim rebooten gelöscht. 
 + `/tmp/` - Temporäre Dateien die beim rebooten gelöscht werden.
 + `/srv/` - Nur für selber angelegt Daten - quasi wie /usr/local/ aber nur für Skripte sondern für Daten
+  + `/usr/local` - Server Daten die man aber noch "bearbeiten darf". Weitere `/usr/`-Dateien und Verzeichnisse sollten i.d.R. eher unverarbeitet bleiben.
 
 ## Booten
 
@@ -610,6 +617,10 @@ Anschließend wird vom Root-Ordner "vmlinuz" gestartet. Hier lassen sich auch Pa
 
 Der Befehl `update-grub` rennt gegen die Datein im `/etc/grub.d/`. Hier werden die Skripte nacheinander ausgeführt und pushen ihre Ausgabe anschließend nach `/boot/grub/grub.cfg`. 
 Einfache Änderungen können auch direkt nach `/boot/grub/grub.cfg` kopiert werden, die Änderungen werden allerdings beim nächsten Kernel-Update wieder überschrieben.
+
+#### Redhat spezifisch
+
+update-grub ist Debian spezifisch. Ansonsten kann der Grub mit `grub2-mkconfig -o /boot/grub2/grub.cfg` aktualisiert werden. Dies klappt i.d.R. in allen Systemen.
 
 ## Kernel
 
@@ -633,6 +644,9 @@ Zeigt Informationen an mit der der Treiber der Hardware (in dem Falle eine amd-G
 
 + `dpkg -S raven_gpu_info` - Sucht nach Informationen zu raven_gpu_info (eine Firmware für amdgpu)
 
+`cat /proc/cmdline` -> Gibt die Boot-Command-Line zurück die i.d.r. Grub auslösen würde.
+
+
 ### Treiber erkennen
 
 * `lspci` - Alle Treiber für die Schnittstellen ausgeben
@@ -652,7 +666,7 @@ ip -c link show # Wir sehen 5 Netzwerk Dummies
 > Unter Ubuntu ist nicht ALLES eine Datei. Netzwerkkarten z.B. nicht.
 
 ### Task
-#### Dummy Netzwerkinterface dummy0 in intern0 umbenennen
+Dummy Netzwerkinterface dummy0 in intern0 umbenennen
 
 [Zum Wiki](https://wiki.lab.linuxhotel.de/doku.php/admin_grundlagen:udev)
 
@@ -681,6 +695,9 @@ Streng genommen werden Services die enabled sind lediglich in dem Ordner:
 Wir finden raus das nginx nicht läuft da Apache2 den Port bereits belegt hat.
 + `systemctl disabale --now nginx`
 + `systemctl reset-failed`
+
+Weitere spannende Dateien
++ systemctl cat \<Service>
 
 ## VIM - Its Magic!
 
@@ -1053,6 +1070,7 @@ Beispiel um Failed Password aus der auth.log zu finden. Die 5 IP Adressen sortie
 + `journalctl -S "14:00:00" /usr/sbin/sshd` 
 #### Alle Logmeldungen die mindestens das Level Warning haben
 + `journalctl -p 4`
++ `journalctl -f` - Aktives Loggin verfolgen
 
 <hr>
 
@@ -1065,7 +1083,7 @@ Unter Ubuntu ist diese Datei defaultmäßig vorhanden. Unter RedHat z.B. müsste
 + `systemctl enable --now systemd-journal-upload.service` -> starten und enablen
 + `systemctl status systemd-journal-upload.service` -> Service prüfen, Bugfixing mit `journalctl -u systemd-journal-upload.service`
 
-
+Journaling sind nicht persistent, solange sie nicht unter /var/log/journal gespeichert werden ([WIKI](https://wiki.lab.linuxhotel.de/doku.php/admin_grundlagen:journald))
 
 
 #### Author: Robin Heydkamp

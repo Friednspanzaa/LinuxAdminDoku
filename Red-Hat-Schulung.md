@@ -77,6 +77,9 @@ Wenn aber im aktuellen Ordner ein png vorhanden ist, ersetzt die Shell das Stern
 
 Dateitypen
 
+Unter Windows kennen wir Dateiendungen, z.b. .pdf, .txt usw. 
+Unter Linux (wo "alles" eine Datei ist) sind damit andere Typen gemeint:
+
 | Zeichen | Bezeichnung |
 | --------| --------|
 | - | regular file |
@@ -86,10 +89,6 @@ Dateitypen
 | l | symlink |
 | s | Sockets |
 | p | named pipes |
-
-
-
-
 
 
 | Befehl / Datei | Funktion |
@@ -112,7 +111,7 @@ ALLE Rechte löschen
 - mv file 2 dir1
 - mv file1 dir 1
 
-mv: 
+mv:
 `dir1` braucht w damit wir in dem Verzeichniss schreiben dürfen und X damit wir in das Verzeichniss wechseln dürfen.
 
 cp: `file1` braucht READ damit wir wissen was wir schreiben sollen.
@@ -289,6 +288,39 @@ vgcreate vg_data /dev/sda4
 vgs
 
 
-PV = Physical Volume = Quelle
-VG = Virtual Group  = Virtuelles Ziel
-LV = Logical Volume = Nutz-Nießer
+- PV = Physical Volume = Quelle
+- VG = Virtual Group  = Virtuelles Ziel
+- LV = Logical Volume = Nutz-Nießer
+```
+
+### Kernel 
+
+`systemctl list-dependencies` - Listet alle Boot-Relevanten "" auf.
+
+**Unit-Types**
+- service
+  - oneshots
+- target
+  - War quasi früher mal das "Runlevel"
+- path
+- socket
+  - 
+- moint
+- 
+- swap
+- timer
+
+Rausfinden, ob auf einen Port gelauscht wird...
+`lsof -Pni :9090`
+
+- `/lib/systemd/*` und `/usr/lib/systemd/*`: (niedrigste Priorität) aus der Paketverwaltung, nicht anfassen.
+- `/run/systemd/*`: dynamisch von systemd erzeugt
+- `/etc/systemd/*`: (höchste Priorität) Hier dürfen sich Admins austoben
+
+trap "echo nö, heute nicht' TERM
+echo $$
+kill -term XXXX
+
+
+`sysctl -a` - Alle Kernel Einstellungen anzeigen.
+
