@@ -63,7 +63,7 @@ Wenn aber im aktuellen Ordner ein png vorhanden ist, ersetzt die Shell das Stern
 | /srv| Nutzdaten von Serverdiensten |
 | /sys| Gerätedateien und Hardwareparameter |
 | /tmp| temporäre Dateien die nacht dem neubooten wahrscheinlich gelöscht werden.|
-| /usr | hier sollte wirklich nur die Paketverwalung rein|
+| /usr | hier sollte wirklich nur die Paketverwalung rein - "unix static resources"|
 | /usr/bin |grundlegende Befehle (für alle Benutzer) |
 | /usr/lib | Libarys, Programm-Komponenten |
 | /usr/lib/modules | |
@@ -323,4 +323,77 @@ kill -term XXXX
 
 
 `sysctl -a` - Alle Kernel Einstellungen anzeigen.
+Repository für zusätzlche Treiber und aktuellere Kernel:
+    - `dnf install epel-release.noarch`
+    - `dnf install elrepo-release.noarch`
 
+### Netzwerk
+[Wiki](https://wiki.lab.linuxhotel.de/doku.php/admin_grundlagen:netzwerk#netzwerk_temporaer_einrichten)
+
+Was brauche ich für ein "Netzwerk".
+### Layer 1 / Betriebssystem
+  - Treiber
+  - Netzwerkkarte
+  - Device (`pgre -la udev` - der UDEV-Deamon schaut nach neuer Hardware, bzw. neuen Devices)
+
+#### Zugehörige Befehle:
+- `ip link`
+- `dmesg`
+- `ethtool`
+- `modinfo`
+- `modprobe`
+- `udevadm`
+------
+
+### Layer 2 / Ethernet, Wify, PPP
+  - MACAdresse
+  - Switch
+  - Geschwindigkeit
+
+#### Zugehörige Befehle:
+- `ip -s link`
+- `ethtool`
+------
+
+### Layer 3 / IPv6 / IPv4
+  - IP-Adress
+  - Router
+  - Subnetz
+
+#### Zugehörige Befehle:
+- `ip -- br a s`
+- `ip route`
+- `ip address`
+- `ip neighbor`
+
+------
+
+### Layer 4 / TCP - UPD
+  - Port
+
+#### Zugehörige Befehle:
+- `ss -tuapn`
+- `lsof -Pni`
+- `nc -l 5000` - Nur zum LAUSCHEN, Pakete werden nicht weitergeleitet. 
+- `strace` eignet sich eher zum "debuggen"
+- `ping`
+
+
+- `ls /etc/udev/rules.d/`
+- `vim /etc/udev/rules.d/70-net.rules`
+- `ACTION=="add", SUBSYSTEM=="net", KERNEL=="dummy0", NAME="intern0"`
+- `modprobe -r dummy`
+- `modprobe dummy numdummies=1`
+
+Treiber rausfinden und alternative Treiber suchen bzw. installieren
+
+`udevadm info -a /sys/class/net/wlp2s0`  (wlp2s0 ist in diesem Fall die WlanKarte)
+- unter "DRIVERS" steht dann der Wert des installierten Treibers.
+- Alternativ `ethtool -i wlp2s0` 
+- `modinfo iwlwifi` - Zeigt uns verschiedene Firemwares an. Auch Alternativen. diese können z.B. mit 
+- `dnf provides */iwlwifi-5000-5*`
+
+---
+
+net.ipv4.conf.all.forwarding
+net.ipv4.ip_forward=1

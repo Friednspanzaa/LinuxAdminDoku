@@ -76,7 +76,7 @@
 
 #### Tipps und Tricks
 
-- Um eine Befehlszeile mit # Auszukommentieren: `ESC + #`
+- Um eine Befehlszeile mit # Auszukommentieren: `Alt + #`
 - Um den letzten Parameter zu kopieren: `Alt + .`
 - Programm `etckeeper`: Macht aus dem /etc/ ein Repository, welches man dann entsprechend reverten könnte.
 
