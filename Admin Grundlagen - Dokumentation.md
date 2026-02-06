@@ -93,6 +93,8 @@
 - [Honest Achmed Used Cars and CA-Certs](https://bugzilla.mozilla.org/show_bug.cgi?id=647959)
 - [Cockpit-Lokal](http://localhost:9090/) (Aktivieren mit `systemctl start cockpit`)
 - [OpenCode Container](https://container.gov.de/)
+- [NitroKey](https://www.nitrokey.com/de/produkte/nitrokeys)
+- [FreeIPA](https://www.freeipa.org/)
 
 ---
 
@@ -1032,6 +1034,8 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```bash
 ssh-keygen -t ed25519 -C "Kommentar"
 ssh-copy-id <nutzerdeshosts>@<hostname>
+ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub # Prüfen wie der aktuelle sshd-Key ist
+
 ```
 
 #### ~/.ssh/authorized_keys

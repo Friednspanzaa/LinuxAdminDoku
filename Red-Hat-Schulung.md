@@ -397,3 +397,14 @@ Treiber rausfinden und alternative Treiber suchen bzw. installieren
 
 net.ipv4.conf.all.forwarding
 net.ipv4.ip_forward=1
+
+### DNS
+
+die Reihenfolge, wie DNS aufgelöst wird wird in der Datei "/etc/nsswitch.conf" definiert unter dem Parameter "hosts"
+`grep hosts /etc/nsswitch.conf` -> hosts: files dns myhostname
+
+- files werden z.B. die host-Datei sei (`/etc/hosts`).
+- Der DNS ist in der `/etc/resolv.conf` definiert.
+- myhostname ist quasi immer die "eigene"-IP Adresse, somit verscuht er sich notfalls selbst als DNS-Server zu verwenden.
+
+- `getent hosts www.golem.de` - ist eine bessere Abfrage auf die IP-Adresse.
